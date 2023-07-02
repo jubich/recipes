@@ -78,7 +78,7 @@ The ``Geometry`` block contains types and coordinates of the atoms in your
 system.  The geometry of the system in the sample input file is provided in the
 so called "gen" format, which was the traditional geometry input format of the
 DFTB method. The formal description of this format can be found in the DFTB+
-manual.  In the current example, the geometry is ::
+|manual|_.  In the current example, the geometry is ::
 
   Geometry = GenFormat {
     3  C                   # 3 atoms, non-periodic cluster
@@ -97,7 +97,7 @@ numbering of the atoms in the system (the actual values are ignored by the
 parser).  The second column contains the type of each atom, given as the
 position of the appropriate element in the element list of the second line of
 the "gen" data.  The ``GenFormat{}`` is not the only way to specify the
-geometry, you should check the manual for other methods.
+geometry, you should check the |manual|_ for other methods.
 
 As demonstrated above, it is possible to put arbitrary comments in the HSD input
 after a hash-mark (``#``) character. Everything between this character and the
@@ -170,7 +170,7 @@ or ::
 
   GradAMax [Electronvolt/Angstrom] = 5.14e-3
 
-See the manual for the list of accepted modifiers and additional convergence
+See the |manual|_ for the list of accepted modifiers and additional convergence
 criteria supported by the ``Convergence`` block.
 
 The ``MaxSteps`` keyword specifies the maximum number of geometry optimisation
@@ -192,10 +192,9 @@ Hamiltonian
 -----------
 
 You have to decide upon the model used to describe your system in order to
-calculate its properties. At the moment DFTB+ simplifies this decision quite a
-lot, since it currently only supports types of Density Functional based Tight
-Binding Hamiltonians (with some extensions). In our example, the chosen
-self-consistent DFTB Hamiltonian has the following properties::
+calculate its properties. At the moment DFTB+ only supports the DFTB and xTB
+models. In our example, the chosen self-consistent DFTB Hamiltonian has the
+following properties::
 
   Hamiltonian = DFTB {                 # DFTB Hamiltonian
     Scc = Yes                          # Use self-consistent charges
@@ -211,7 +210,7 @@ self-consistent DFTB Hamiltonian has the following properties::
     }
   }
 
-In this example the charge self-consistent DFTB (SCC-DFTB) method is used for
+In this example the self-consistent charge DFTB (SCC-DFTB) method is used for
 the electronic structure (and calculating the total energy, forces, etc.). This
 method includes the effect of charge transfer between atoms of the system. In
 order to find the final ground state of the system it has to iteratively solve
@@ -221,7 +220,7 @@ Hamiltonian and the charges obtained after the diagonalisation of the
 Hamiltonian is below a certain tolerance (the default is 1e-5 electrons, but can
 be tuned with the ``SccTolerance`` option). If this level of convergence is not
 reached within a certain number of iterations, the code calculates the total
-energy using the charges obtained so far and stops with an appropriate warning
+energy using the charges obtained so far and stops with an appropriate error
 message. The maximal number of scc-iterations is by default 100, but can be
 changed via the ``MaxSccIterations`` option.
 
@@ -253,7 +252,7 @@ Historically the Slater-Koster file format did not contain any information about
 which valence orbitals were considered when generating the interaction tables,
 this can lead to data for physically inappropriate orbitals being included in
 the files.  Therefore, you must provide the value of the highest orbital angular
-momentum each element, specified as ``s``, ``p``, ``d`` or ``f``. This
+momentum for each element, specified as ``s``, ``p``, ``d`` or ``f``. This
 information can be obtained from the documentation of the Slater-Koster
 files. In the distributed standardised sets (available at http://www.dftb.org)
 this information is contained in the documentation appended to the end of each
@@ -491,8 +490,8 @@ You do not have to explicitly set all the possible options for DFTB+ in the
 input, as for most of them there are default values set by the parser if not set
 in the input. If you want to know which default values have been set for those
 missing specifications, you should look at the processed input file
-`dftb_pin.hsd`, which contains the value for all the possible input settings
-(see next the subsection).
+`dftb_pin.hsd`, which contains the values for all the possible input settings
+(see the :ref:`subsec-dftb_pin.hsd` subsection).
 
 At this point the DFTB+ code is initialised and the most important parameters
 of the calculation are printed out::
@@ -613,6 +612,7 @@ obtain::
   WARNING!
   -> !!! Geometry did NOT converge!
 
+.. _subsec-dftb_pin.hsd:
 
 dftb_pin.hsd
 ------------
@@ -663,8 +663,8 @@ detailed.out
 ------------
 
 This file contains detailed information about the properties of your system. It
-is updated continuously during the run, by the end of the calculation will
-contain values calculated during the last SCC cycle. All the numerical values
+is updated continuously during the run, by the end of the calculation it will
+contain the values calculated during the last SCC cycle. All the numerical values
 given in this file are in atomic units, unless explicitly specified otherwise.
 
 `detailed.out` contains (among other data) the number of the last geometry step
@@ -712,38 +712,9 @@ Then the populaton analysis information follows::
       3   1   0   0       0.70369649  s
 
 It shows the total charge of the system and the charges for each atom, followed
-by detailed population analyis for each atom, shell and orbital.
+by detailed population analysis for each atom, shell and orbital.
 
 .. |H2O| replace:: H\ :sub:`2`\ O
-
-
-Then you obtain a count of the total number electrons in the system, and the
-number of electrons on each atom, each atomic shell of the atoms (s, p, d, etc.)
-and each atomic orbital (labelled by their m\ :sub:`z` value) as calculated by
-Mulliken-analysis::
-
-  Nr. of electrons (up):      8.00000000
-  Atom populations (up)
-   Atom       Population
-      1       6.59260702
-      2       0.70369649
-      3       0.70369649
-
-  l-shell populations (up)
-   Atom Sh.   l       Population
-      1   1   0       1.73421608
-      1   2   1       4.85839094
-      2   1   0       0.70369649
-      3   1   0       0.70369649
-
-  Orbital populations (up)
-   Atom Sh.   l   m       Population  Label
-      1   1   0   0       1.73421608  s
-      1   2   1  -1       1.68105131  p_y
-      1   2   1   0       1.17733963  p_z
-      1   2   1   1       2.00000000  p_x
-      2   1   0   0       0.70369649  s
-      3   1   0   0       0.70369649  s
 
 In our case, due to the electronegativity difference, the hydrogen atoms are
 positively charged (having only 0.704 electrons), while the oxygen atom is
@@ -828,7 +799,7 @@ you would obtain separate values for the spin up and spin down levels::
       5    10.865  0.00000
       6    15.197  0.00000
 
-The eigenenergies are in units of electron volts. You can use the scripts
+The eigenenergies are in units of electronvolts. You can use the scripts
 `dp_bands` in the `dptools` package to convert the data in `band.out` to
 XNY-format, which can be visualised with common 2D plotting tools.
 
@@ -852,8 +823,9 @@ to ``Yes`` in the ``Options`` block ::
   }
 
 you obtain the file `results.tag` at the end of your calculation, which contains
-some of the most important data in a format easily parsed by a script or a
-program. This file contains entries like::
+some of the most important data in a format easily parsed by the parsers in the
+dftbplus_ptools package or other scripts/programs. This file contains entries
+like::
 
    forces              :real:2:3,3
     -0.711965764038220E-026 -0.837746041076892E-005 -0.292432744686266E-012
@@ -872,4 +844,4 @@ Other output files
 
 There are also other output files not discussed in detail here. They are only
 created, if appropriate choices in the ``Options`` or ``ExcitedState`` blocks
-are set. Please consult the manual for further details.
+are set. Please consult the |manual|_ for further details.

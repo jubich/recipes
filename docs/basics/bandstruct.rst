@@ -11,10 +11,11 @@ periodic system (such as wires, surfaces or solids) can be obtained using DFTB+.
 .. |TiO2| replace:: TiO\ :sub:`2`\
 
 The conversion scripts used here are part of the `dptools` package, which is
-distributed with DFTB+. In order to perform the calculations in this chapter,
-you will need the Slater-Koster sets `mio` and `tiorg`. The sample input files
-assume that the necessary Slater-Koster files have been copied into a
-subdirectory `mio-ext`.
+distributed with DFTB+ (see the :ref:`sec-introduction` section). In order to
+perform the calculations in this chapter, you will need the Slater-Koster sets
+`mio` and `tiorg`. The sample input files assume that the necessary Slater-Koster
+files have been downloaded using the supplied download script (see the
+:ref:`sec-introduction` section).
 
 
 Introduction
@@ -23,8 +24,8 @@ Introduction
 The calculation of the band structure for a periodic system consists of two
 steps.
 
-* First for self-consistent (SCC) calculations, the charges in the system must
-  be calculated using a converged k-point sampling.
+* First for self-consistent charge (SCC) calculations, the charges in the system
+  must be calculated using a converged k-point sampling.
 
 * Then, keeping the obtained self-consistent charges fixed, the one-electron
   levels must be calculated for k-points chosen along the specific lines in
@@ -47,7 +48,7 @@ to give correct results:
 * quality of the k-point sampling grid.
 
 In the current tutorial, the SCC tolerance is set to be ``1e-5``. For the
-k-point sampling, the :math:`8 \times 8 \times 8` Monkhorst-Pack set will be
+k-point sampling, the :math:`4 \times 4 \times 4` Monkhorst-Pack set will be
 used. Both quantities ensure good convergence in the charges for anatase, but
 may not be suitable for other applications.
 
@@ -123,7 +124,7 @@ The k-points are generated automatically using the ``SupercellFolding``
 method, which enables among others the generation of Monkhorst-Pack schemes. In
 the current example, a k-point set equivalent to the Monkhorst-Pack scheme
 :math:`4 \times 4 \times 4` has been chosen (For details how to specify the
-coefficients and the shift vectors, please consult the manual).::
+coefficients and the shift vectors, please consult the |manual|_).::
 
     KPointsAndWeights = SupercellFolding {
       4 0 0
@@ -164,13 +165,14 @@ in the ``Analysis`` block using the ``ProjectStates`` options. In our example::
 
 we decide to get the PDOS for the Ti and the O atoms separately. Each ``Region``
 block specifies the atoms (either selected by species, atomic ranges, or as a
-combination of both), for which PDOS should be created. Additionally, you can
-select, whether you would like to see each atomic shell of the atoms in a region
-(s, p, d, etc.) separately or together for that region. With the ``Label`` tag
-you can specify the prefix for the data files created. Using the settings above,
-we will obtain 5 files: `dos_ti.1.dat`, `dos_ti.2.dat`, `dos_ti.3.dat`,
-`dos_o.1.dat` and `dos_o.2.dat`. The first three contain the PDOS for the s, p,
-and d shells of Ti, while the last two files provide the oxygen s and p shells.
+combination of both (see the |manual|_)), for which PDOS should be created.
+Additionally, you can select, whether you would like to see each atomic shell of
+the atoms in a region (s, p, d, etc.) separately or together for that region. With
+the ``Label`` tag you can specify the prefix for the data files created. Using
+the settings above, we will obtain 5 files: `dos_ti.1.dat`, `dos_ti.2.dat`,
+`dos_ti.3.dat`, `dos_o.1.dat` and `dos_o.2.dat`. The first three contain the PDOS
+for the s, p and d shells of Ti, while the last two files provide the oxygen s
+and p shells.
 
 
 Plotting the density of states
@@ -190,12 +192,15 @@ setting different options for `dp_dos`. Invoke it with the help option::
   dp_dos -h
 
 shows detailed information about possible options. The results can be visualised
-with `xmgrace`, for example, with the commands::
+with the `plotxy` tool, which is a simple command line wrapper around the
+matplotlib python library and distributed with DFTB+ (issue the command
+``plotxy -h`` for help)::
 
-  xmgrace -nxy dos_total.dat
+  plotxy --xlabel 'Energy (eV)' --ylabel 'DOS / PDOS (arb. units)' -l DOS -- dos_total.dat
 
 and by zooming into the region around the Fermi-level (showing the valence band
-edge and the conduction band edge), you should obtain a picture like this:
+edge and the conduction band edge) or adding additional x- and y-limits
+(``--xlimits -7 5 --ylimits 0 9``), you should obtain a picture like this:
 
   .. figure:: ../_figures/basics/tio2_dos.png
      :height: 40ex
@@ -212,8 +217,11 @@ into NXY files. In the case of `dos_ti.1.dat` you would execute::
 and similarly for the other PDOS files. It is important that you specify the
 weighting option ``-w`` for the PDOS files, as otherwise the total DOS (instead
 of the appropriate PDOS) will be created in each case. By visualizing the
-obtained data files together with the total DOS, you should obtain a picture
-like:
+obtained data files together with the total DOS issuing::
+
+  plotxy --xlabel 'Energy (eV)' --ylabel 'DOS / PDOS (arb. units)' --xlimits -7 5 --ylimits 0 9 -l 'PDOS O(p)' 'PDOS O(s)' 'PDOS Ti(d)' 'PDOS Ti(p)' 'PDOS Ti(s)' 'DOS' -- dos*.dat
+
+you should obtain a picture like:
 
   .. figure:: ../_figures/basics/tio2_pdos.png
      :height: 40ex
@@ -264,8 +272,9 @@ adaptions:
 
 * As we want to use the charges, as obtained in the previous well converged
   calculation, you have to copy the `charges.bin` file from the previous
-  calculation into the directory of the current calculation. At the same time,
-  you must instruct the code to read those charges, by setting::
+  calculation into the directory of the current calculation (see the `run.sh`
+  script in the foler of this example). At the same time, you must instruct the
+  code to read those charges, by setting::
 
     ReadInitialCharges = Yes
 

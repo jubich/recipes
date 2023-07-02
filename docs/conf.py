@@ -96,6 +96,11 @@ numfig_format = {
     'section': 'Section'
 }
 
+# Link to manual for current version
+rst_epilog = f"""
+.. |manual| replace:: manual
+.. _manual: https://github.com/dftbplus/dftbplus/releases/download/{version}/manual.pdf
+"""
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -263,7 +268,7 @@ def _get_tar_filter(ignorefile):
 
     if not os.path.exists(ignorefile):
         return None
-    
+
     with open(ignorefile, 'r') as fobj:
         patterns = [line.strip() for line in fobj.readlines()]
 

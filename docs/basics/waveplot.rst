@@ -75,7 +75,7 @@ eigenvectors in binary format. Both files are needed by waveplot.
 Running Waveplot
 ================
 
-Now, you have to decide, what kind of charge distributions, wavefunctions etc.
+Now, you have to decide, what kind of charge distributions, wavefunctions, etc.
 to plot. In the current example, we will plot the total charge distribution of
 the water molecule, the charge distribution (wavefunction squared) for the
 highest occupied molecular orbital (HOMO), the wave function for the HOMO, and
@@ -147,7 +147,7 @@ Some notes to the input:
   instructed by using the ``OptimalCuboid`` method to take the smallest cuboid,
   which contains all the atoms and enough space around them, so that the
   wavefunctions are not leaking out of it. (For details and other options for
-  ``PlottedRegion`` please consult the manual.)  The selected region in the
+  ``PlottedRegion`` please consult the |manual|_.)  The selected region in the
   example is sampled by a mesh of 50 by 50 by
   50.  (``NrOfPoints``)
 
@@ -166,71 +166,72 @@ Output
 
 ::
 
-  ================================================================================
-       WAVEPLOT  0.2
-  ================================================================================
+ ================================================================================
+      WAVEPLOT  0.3
+ ================================================================================
 
-  Interpreting input file 'waveplot_in.hsd'
-  --------------------------------------------------------------------------------
-  WARNING!
-  -> The following 3 node(s) had been ignored by the parser:
-  (1)
-  Path: waveplot/Basis/C
-  Line: 1-33 (File: wfc.mio-0-1.hsd)
-  (2)
-  Path: waveplot/Basis/N
-  Line: 52-84 (File: wfc.mio-0-1.hsd)
-  (3)
-  Path: waveplot/Basis/S
-  Line: 120-170 (File: wfc.mio-0-1.hsd)
+ Interpreting input file 'waveplot_in.hsd'
+ WARNING!
+ -> The following 4 node(s) have been ignored by the parser:
+ (1)
+ Path: waveplot/Basis/C
+ Line: 1-33 (File: ../../slakos/wfc/wfc.mio-1-1.hsd)
+ (2)
+ Path: waveplot/Basis/N
+ Line: 52-84 (File: ../../slakos/wfc/wfc.mio-1-1.hsd)
+ (3)
+ Path: waveplot/Basis/S
+ Line: 120-170 (File: ../../slakos/wfc/wfc.mio-1-1.hsd)
+ (4)
+ Path: waveplot/Basis/P
+ Line: 172-219 (File: ../../slakos/wfc/wfc.mio-1-1.hsd)
 
-  Processed input written as HSD to 'waveplot_pin.hsd'
-  Processed input written as XML to 'waveplot_pin.xml'
-  --------------------------------------------------------------------------------
+ Processed input written as HSD to 'waveplot_pin.hsd'
+ --------------------------------------------------------------------------------
 
-  Doing initialisation
+ Doing initialisation
 
-  Starting main program
+ Starting main program
 
-  Origin
-    -5.00000 -6.35306 -6.47114
-  Box
-    10.00000 0.00000 0.00000
-    0.00000 11.08472 0.00000
-    0.00000 0.00000 12.94228
-  Spatial resolution [1/Bohr]:
-    5.00000 4.51071 3.86331
+ Origin
+   -5.00000 -6.35304 -6.47115
+ Box
+   10.00000 .00000 .00000
+   .00000 11.08469 .00000
+   .00000 .00000 12.94230
+ Spatial resolution [1/Bohr]:
+   5.00000 4.51073 3.86330
 
-  Total charge of atomic densities:    7.981973
+ Total charge of atomic densities:    7.981972
 
 
-   Spin KPoint  State  Action        Norm   W. Occup.
-      1      1      1    read
-      1      1      2    read
-      1      1      3    read
-      1      1      4    read
+  Spin KPoint  State  Action        Norm   W. Occup.
+     1      1      1    read
+     1      1      2    read
+     1      1      3    read
+     1      1      4    read
 
-  Calculating grid
+ Calculating grid
 
-      1      1      1    calc    0.996855    2.000000
-      1      1      2    calc    1.003895    2.000000
-      1      1      3    calc    0.998346    2.000000
-      1      1      4    calc    1.000053    2.000000
-  File 'wp-1-1-4-abs2.cube' written
-  File 'wp-1-1-4-real.cube' written
-  File 'wp-abs2.cube' written
+     1      1      1    calc    0.996855    2.000000
+     1      1      2    calc    1.003895    2.000000
+     1      1      3    calc    0.998346    2.000000
+     1      1      4    calc    1.000053    2.000000
+ File 'wp-1-1-4-abs2.cube' written
+ File 'wp-1-1-4-real.cube' written
+ File 'wp-abs2.cube' written
 
-  Total charge:    7.998297
+ Total charge:    7.998296
 
-  File 'wp-abs2diff.cube' written
+ File 'wp-abs2diff.cube' written
 
-  ================================================================================
+ ================================================================================
 
 Some notes on the output:
 
 * The warnings about unprocessed nodes appears, because the included file
-  ``wfc.mio-0-1.hsd`` also contained wave function coefficients for elements (C,
-  N, S), which are not present in the calculated system. Hence these extra
+  ``wfc.mio-1-1.hsd`` also contained wave function coefficients for elements (C,
+  N, S, P), which are not present in the calculated system. Hence these extra
   definitions in the file were ignored.
 
 * The ``Total charge of atomic densities`` tells you the amount of charge found
@@ -251,31 +252,16 @@ Visualising the results
 =======================
 
 The volumetric data generated by Waveplot is in the Gaussian cube format and can
-be visualized with several graphical tools (VMD, JMol, ParaView, ...). Below we
-show the necessary steps to visualize it using VMD. (It refers to VMD version
-1.8.6 and may differ in newer versions.)
-
+be visualized with several graphical tools (JMol, VMD, ParaView, ...). In the
+following, we use JMol to visualize the files using scripts stored in the
+appropriate folder for this example.
 
 Total charge distribution
 -------------------------
 
 The cube file containing the total charge distribution ``wp-abs2.cube`` can be
-read by using the ``File|New Molecule`` menu. VMD should automatically
-recognise, that the file has the Gaussian cube format. After successful loading,
-the VMD screen shows the skeleton of the molecule.
-
-In order to visualise the charge distribution, the graphical representation of
-the molecule has to be changed. This can be achieved by using the
-``Graphics|Representations...`` submenu. The skeleton representation can be
-turned to a CPK represenation (using balls and sticks) by selecting CPK for the
-``Drawing method`` in the ``Graphical Representations`` dialog box. Then you
-should create an additional representation (``Create Rep``) and change the
-drawing method for it to be ``Isosurface``. The type of isosurface (``Draw``)
-should be changed from ``Points`` to ``Solid Surface`` and instead of
-``Box+Isosurface`` only ``Isosurface`` should be selected.  Then, by tuning the
-``Isovalue`` one can select the isosurface to be plotted.
-:numref:`fig_waveplot_h2odensity` was created using 0.100. (Display background
-color had been set to white using the ``Graphics|Colors`` menu.)
+visualized by using the ``showabs2.sh`` script. This leads to the following
+picture:
 
   .. _fig_waveplot_h2odensity:
   .. figure:: /_figures/waveplot/h2o-density.png
@@ -283,7 +269,7 @@ color had been set to white using the ``Graphics|Colors`` menu.)
      :alt: H2O density
 
      Total charge density for the H2O molecule, created by Waveplot, visualised
-     by VMD.
+     by JMol.
 
 
 
@@ -291,12 +277,8 @@ Charge distribution difference
 ------------------------------
 
 The charge distribution difference can be plotted in a similar way as the total
-charge. One has to load the file ``wp-abs2diff.cube``. One should then, however,
-make not one, but two additional graphical representations of the type
-``Isosurface``. One of them should have positive isovalue, the other one a
-negative one. The different isosurfaces can be colored in a different way by
-using ``ColorID`` as coloring method and choosing different color values for the
-different representations.
+charge. One has to visualize the file ``wp-abs2diff.cube`` using the
+``showreal.sh`` script.
 
 :numref:`fig_waveplot_h2odensdiff` demonstrates this for the water
 molecule. Negative net populations were colored red, positive net populations
@@ -309,7 +291,7 @@ the hydrogens to the oxygen (lone pair on the oxygen).
      :alt: H2O density difference
 
      Charge density difference (total density minus sum of atomic densities) for
-     the H2O molecule, as created by Waveplot and visualised by VMD.
+     the H2O molecule, as created by Waveplot and visualised by JMol.
 
 
 Molecular orbitals
@@ -322,7 +304,9 @@ plotted, the data contains only positive values, therefore only one isosurface
 representation is necessary (like for the charge distribution). If the real (or
 for periodic systems also the imaginary) part of the wavefunction is to be
 plotted, two isosurface representations are needed, one for the positive and one
-for the negative values (like for the charge difference).
+for the negative values (like for the charge difference). The corresponding
+scripts are ``show1-1-4-abs2.sh`` (for the total charge distribution) and
+``show1-1-4-real.sh`` (for the total charge difference).
 
 :numref:`fig_waveplot_h2ohomoabs2` shows the distribution of the electron
 (wavefunction squared) for the HOMO, while :numref:`fig_waveplot_h2ohomoreal`
